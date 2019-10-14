@@ -1,0 +1,216 @@
+CREATE TABLE Author
+(
+  AuthorID INT NOT NULL,
+  AuthorFName INT NOT NULL,
+  AuthorLName INT NOT NULL,
+  PRIMARY KEY (AuthorID)
+);
+
+CREATE TABLE Customer
+(
+  CustomerID INT NOT NULL,
+  Customer_FName INT NOT NULL,
+  Customer_LName INT NOT NULL,
+  PRIMARY KEY (CustomerID)
+);
+
+CREATE TABLE State
+(
+  StateID INT NOT NULL,
+  State INT NOT NULL,
+  PRIMARY KEY (StateID)
+);
+
+CREATE TABLE City
+(
+  CityID INT NOT NULL,
+  City INT NOT NULL,
+  PRIMARY KEY (CityID)
+);
+
+CREATE TABLE AddressType
+(
+  AdressTypeID INT NOT NULL,
+  AddressTypeName INT NOT NULL,
+  PRIMARY KEY (AdressTypeID)
+);
+
+CREATE TABLE Genre
+(
+  GenreID INT NOT NULL,
+  GenreName INT NOT NULL,
+  PRIMARY KEY (GenreID)
+);
+
+CREATE TABLE BookName
+(
+  BookNameID INT NOT NULL,
+  BookName INT NOT NULL,
+  PRIMARY KEY (BookNameID)
+);
+
+CREATE TABLE Zip
+(
+  ZipID_(FK) INT NOT NULL,
+  PRIMARY KEY (ZipID_(FK))
+);
+
+CREATE TABLE City_Zip
+(
+  CityID_(FK) INT NOT NULL,
+  ZipID INT NOT NULL,
+  CityID INT NOT NULL,
+  ZipID_(FK) INT NOT NULL,
+  PRIMARY KEY (ZipID),
+  FOREIGN KEY (CityID) REFERENCES City(CityID),
+  FOREIGN KEY (ZipID_(FK)) REFERENCES Zip(ZipID_(FK)),
+  UNIQUE (CityID_(FK))
+);
+
+CREATE TABLE Order
+(
+  OrderID INT NOT NULL,
+  CreditCardID_(FK) INT NOT NULL,
+  CustomerID_(FK) INT NOT NULL,
+  Calculated_Total INT NOT NULL,
+  Transaction_Date INT NOT NULL,
+  CustomerID INT NOT NULL,
+  PRIMARY KEY (OrderID),
+  FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+  UNIQUE (CreditCardID_(FK)),
+  UNIQUE (CustomerID_(FK))
+);
+
+CREATE TABLE Book
+(
+  BookID INT NOT NULL,
+  DatePublished INT NOT NULL,
+  PubID_(FK) INT NOT NULL,
+  Summary INT NOT NULL,
+  CoverImageLoc INT NOT NULL,
+  BookNameID_(FK) INT NOT NULL,
+  BookNameID INT NOT NULL,
+  PRIMARY KEY (BookID),
+  FOREIGN KEY (BookNameID) REFERENCES BookName(BookNameID),
+  UNIQUE (PubID_(FK)),
+  UNIQUE (BookNameID_(FK))
+);
+
+CREATE TABLE Address
+(
+  AddressID INT NOT NULL,
+  Street INT NOT NULL,
+  City_(FK) INT NOT NULL,
+  State_(FK) INT NOT NULL,
+  StateID INT NOT NULL,
+  CityID INT NOT NULL,
+  PRIMARY KEY (AddressID),
+  FOREIGN KEY (StateID) REFERENCES State(StateID),
+  FOREIGN KEY (CityID) REFERENCES City(CityID),
+  UNIQUE (City_(FK)),
+  UNIQUE (State_(FK))
+);
+
+CREATE TABLE ISBN
+(
+  ISBN INT NOT NULL,
+  BookID_(FK) INT NOT NULL,
+  BookID INT NOT NULL,
+  PRIMARY KEY (ISBN),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID),
+  UNIQUE (BookID_(FK))
+);
+
+CREATE TABLE Customer_Address
+(
+  CustomerID_(FK) INT NOT NULL,
+  AddressID_(FK) INT NOT NULL,
+  CustomerID INT NOT NULL,
+  AddressID INT NOT NULL,
+  PRIMARY KEY (CustomerID_(FK)),
+  FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+  FOREIGN KEY (AddressID) REFERENCES Address(AddressID),
+  UNIQUE (AddressID_(FK))
+);
+
+CREATE TABLE Address_AddressType
+(
+  _AddressID_(FK) INT NOT NULL,
+  AddressTypeID_(FK) INT NOT NULL,
+  AddressID INT NOT NULL,
+  AdressTypeID INT NOT NULL,
+  PRIMARY KEY (_AddressID_(FK)),
+  FOREIGN KEY (AddressID) REFERENCES Address(AddressID),
+  FOREIGN KEY (AdressTypeID) REFERENCES AddressType(AdressTypeID),
+  UNIQUE (AddressTypeID_(FK))
+);
+
+CREATE TABLE Book_Author
+(
+  BookID_(FK) INT NOT NULL,
+  AuthorID_(FK) INT NOT NULL,
+  BookID INT NOT NULL,
+  AuthorID INT NOT NULL,
+  PRIMARY KEY (BookID_(FK)),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID),
+  FOREIGN KEY (AuthorID) REFERENCES Author(AuthorID),
+  UNIQUE (AuthorID_(FK))
+);
+
+CREATE TABLE Book_Genre
+(
+  GenreID_(FK) INT NOT NULL,
+  BookID_(FK) INT NOT NULL,
+  GenreID INT NOT NULL,
+  BookID INT NOT NULL,
+  PRIMARY KEY (GenreID_(FK)),
+  FOREIGN KEY (GenreID) REFERENCES Genre(GenreID),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID),
+  UNIQUE (BookID_(FK))
+);
+
+CREATE TABLE Book_Order
+(
+  BookID_(FK) INT NOT NULL,
+  OrderID_(FK) INT NOT NULL,
+  BookID INT NOT NULL,
+  OrderID INT NOT NULL,
+  PRIMARY KEY (BookID_(FK)),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID),
+  FOREIGN KEY (OrderID) REFERENCES Order(OrderID),
+  UNIQUE (OrderID_(FK))
+);
+
+CREATE TABLE PaymentInfo
+(
+  CreditCard_ID INT NOT NULL,
+  SecCode INT NOT NULL,
+  Credit_Holder_Name INT NOT NULL,
+  ExpirationDate INT NOT NULL,
+  OrderID INT NOT NULL,
+  PRIMARY KEY (CreditCard_ID),
+  FOREIGN KEY (OrderID) REFERENCES Order(OrderID)
+);
+
+CREATE TABLE Publisher
+(
+  PubID INT NOT NULL,
+  PubName INT NOT NULL,
+  addressID_(FK) INT NOT NULL,
+  AddressID INT NOT NULL,
+  PRIMARY KEY (PubID),
+  FOREIGN KEY (AddressID) REFERENCES Address(AddressID),
+  UNIQUE (addressID_(FK))
+);
+
+CREATE TABLE Book_Publisher
+(
+  BookID_(FK) INT NOT NULL,
+  PubID_(FK) INT NOT NULL,
+  PubID INT NOT NULL,
+  BookID INT NOT NULL,
+  PRIMARY KEY (BookID_(FK)),
+  FOREIGN KEY (PubID) REFERENCES Publisher(PubID),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID),
+  UNIQUE (PubID_(FK))
+);
